@@ -3,22 +3,22 @@ package base
 import "errors"
 
 type FileWriterConf struct {
-	On              bool   `toml:"On"`
-	LogPath         string `toml:"LogPath"`
-	RotateLogPath   string `toml:"RotateLogPath"`
-	WfLogPath       string `toml:"WfLogPath"`
-	RotateWfLogPath string `toml:"RotateWfLogPath"`
+	On              bool
+	LogPath         string
+	RotateLogPath   string
+	WfLogPath       string
+	RotateWfLogPath string
 }
 
 type ConsoleWriterConf struct {
-	On    bool `toml:"On"`
-	Color bool `toml:"Color"`
+	On    bool
+	Color bool
 }
 
 type LogConfig struct {
-	Level string            `toml:"LogLevel"`
-	FW    FileWriterConf    `toml:"FileWriter"`
-	CW    ConsoleWriterConf `toml:"ConsoleWriter"`
+	Level string
+	FW    FileWriterConf
+	CW    ConsoleWriterConf
 }
 
 func SetLogConf(conf LogConfig) {
