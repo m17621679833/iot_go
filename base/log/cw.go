@@ -18,7 +18,7 @@ func (r *ColorRecord) String() string {
 	case INFO:
 		return fmt.Sprintf("\033[36m%s\033[0m [\033[32m%s\033[0m] \033[47;30m%s\033[0m %s\n",
 			r.time, LevelFlags[r.level], r.code, r.info)
-	case WARN:
+	case WARNING:
 		return fmt.Sprintf("\033[36m%s\033[0m [\033[33m%s\033[0m] \033[47;30m%s\033[0m %s\n",
 			r.time, LevelFlags[r.level], r.code, r.info)
 	case ERROR:

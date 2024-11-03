@@ -11,14 +11,14 @@ import (
 )
 
 var (
-	LevelFlags = []string{"trace", "debug", "info", "warn", "error", "fatal", "panic"}
+	LevelFlags = []string{"trace", "debug", "info", "warning", "error", "fatal", "panic"}
 )
 
 const (
 	TRACE = iota
 	DEBUG
 	INFO
-	WARN
+	WARNING
 	ERROR
 	FATAL
 )
@@ -125,8 +125,6 @@ func boostrapLogWriterSilence(logger *Logger) {
 		logger.terminalWatcher <- true
 		return
 	}
-	log.Printf("boostrapLogWriterSilence %s\n", r.String())
-
 	for _, writer := range logger.logWriters {
 		if err := writer.Write(r); err != nil {
 			log.Printf("write log writer failed: %v", err)
@@ -141,7 +139,6 @@ func boostrapLogWriterSilence(logger *Logger) {
 				logger.terminalWatcher <- true
 				return
 			}
-			log.Printf("ssss  %s\n", r.String())
 			for _, writer := range logger.logWriters {
 				if err := writer.Write(r); err != nil {
 					log.Printf("write log writer failed: %v", err)
@@ -202,8 +199,8 @@ func (l *Logger) Info(format string, args ...interface{}) {
 	l.productLogRecordToLogWriter(INFO, format, args...)
 }
 
-func (l *Logger) Warn(format string, args ...interface{}) {
-	l.productLogRecordToLogWriter(WARN, format, args...)
+func (l *Logger) Warning(format string, args ...interface{}) {
+	l.productLogRecordToLogWriter(WARNING, format, args...)
 }
 
 func (l *Logger) Error(format string, args ...interface{}) {
@@ -224,4 +221,45 @@ func (l *Logger) Close() {
 			}
 		}
 	}
+}
+
+func Close() {
+	defaultLogger.Close()
+}
+
+func Trace(format string, args ...interface{}) {
+	defaultLogger.Trace(format, args...)
+}
+
+func SetLayout(layout string) {
+	defaultLogger.layout = layout
+}
+
+func Debug(format string, args ...interface{}) {
+	defaultLogger.Debug(format, args...)
+}
+
+func Info(format string, args ...interface{}) {
+	defaultLogger.Info(format, args...)
+}
+
+func Warning(format string, args ...interface{}) {
+	defaultLogger.Warning(format, args...)
+}
+
+func Error(format string, args ...interface{}) {
+	defaultLogger.Error(format, args...)
+}
+
+func Fatal(format string, args ...interface{}) {
+	defaultLogger.Fatal(format, args...)
+}
+
+func InitLogConf(conf LogConfig) error {
+	defaultLoggerInit()
+	err := InstanceLogConf(conf, defaultLogger)
+	if err != nil {
+		return err
+	}
+	return nil
 }

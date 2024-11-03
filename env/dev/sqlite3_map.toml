@@ -1,0 +1,5 @@
+[list]
+    [list.default]
+        db_name = "iot.db"
+        max_open_conn = 100
+        max_idle_conn = 10

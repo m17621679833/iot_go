@@ -3,22 +3,22 @@ package base
 import "errors"
 
 type FileWriterConf struct {
-	On              bool
-	LogPath         string
-	RotateLogPath   string
-	WfLogPath       string
-	RotateWfLogPath string
+	On              bool   `mapstructure:"on"`
+	LogPath         string `mapstructure:"log_path"`
+	RotateLogPath   string `mapstructure:"rotate_log_path"`
+	WfLogPath       string `mapstructure:"wf_log_path"`
+	RotateWfLogPath string `mapstructure:"rotate_wf_log_path"`
 }
 
 type ConsoleWriterConf struct {
-	On    bool
-	Color bool
+	On    bool `mapstructure:"on"`
+	Color bool `mapstructure:"color"`
 }
 
 type LogConfig struct {
-	Level string
-	FW    FileWriterConf
-	CW    ConsoleWriterConf
+	Level string            `mapstructure:"log_level"`
+	FW    FileWriterConf    `mapstructure:"file_writer"`
+	CW    ConsoleWriterConf `mapstructure:"console_writer"`
 }
 
 func SetLogConf(conf LogConfig) {
@@ -50,7 +50,7 @@ func InstanceLogConf(conf LogConfig, logger *Logger) error {
 			wfw := NewFileWriter()
 			wfw.SetFileName(conf.FW.WfLogPath)
 			wfw.SetPathPattern(conf.FW.RotateWfLogPath)
-			wfw.SetLogLevelFloor(WARN)
+			wfw.SetLogLevelFloor(WARNING)
 			wfw.SetLogLevelCeil(ERROR)
 			logger.registerLogWriter(wfw)
 		}
@@ -66,7 +66,7 @@ func InstanceLogConf(conf LogConfig, logger *Logger) error {
 		logger.SetLevel(INFO)
 
 	case "warn":
-		logger.SetLevel(WARN)
+		logger.SetLevel(WARNING)
 
 	case "error":
 		logger.SetLevel(ERROR)

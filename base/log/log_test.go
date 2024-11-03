@@ -22,7 +22,7 @@ func TestLog(t *testing.T) {
 		},
 	}
 	SetLogConf(conf)
-	logger.Warn("test message")
+	logger.Warning("test message")
 	logger.Close()
 	time.Sleep(time.Second)
 }
