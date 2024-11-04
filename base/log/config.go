@@ -1,36 +1,25 @@
 package base
 
-import "errors"
+import (
+	"errors"
+	conf "iot_go/base/conf"
+)
 
-type FileWriterConf struct {
-	On              bool   `mapstructure:"on"`
-	LogPath         string `mapstructure:"log_path"`
-	RotateLogPath   string `mapstructure:"rotate_log_path"`
-	WfLogPath       string `mapstructure:"wf_log_path"`
-	RotateWfLogPath string `mapstructure:"rotate_wf_log_path"`
-}
+func BootstrapConf(fileName string) {
 
-type ConsoleWriterConf struct {
-	On    bool `mapstructure:"on"`
-	Color bool `mapstructure:"color"`
-}
-
-type LogConfig struct {
-	Level string            `mapstructure:"log_level"`
-	FW    FileWriterConf    `mapstructure:"file_writer"`
-	CW    ConsoleWriterConf `mapstructure:"console_writer"`
-}
-
-func SetLogConf(conf LogConfig) {
+	/*初始化logger base*/
 	defaultLoggerInit()
-	InstanceLogConf(conf, defaultLogger)
+	log := &conf.Base{}
+	conf.ParseConfigByFileName(fileName, log)
+	conf.SetBaseConf(log)
+	SetLogConf(log.LogConfig)
 }
 
-func InstanceLogConf(conf LogConfig, logger *Logger) error {
+func SetLogConf(conf conf.LogConfig) error {
 	if conf.CW.On {
 		writer := NewConsoleWriter()
 		writer.SetColor(conf.CW.Color)
-		logger.registerLogWriter(writer)
+		defaultLogger.registerLogWriter(writer)
 	}
 	if conf.FW.On {
 		if len(conf.FW.LogPath) > 0 {
@@ -43,7 +32,7 @@ func InstanceLogConf(conf LogConfig, logger *Logger) error {
 			} else {
 				writer.SetLogLevelCeil(ERROR)
 			}
-			logger.registerLogWriter(writer)
+			defaultLogger.registerLogWriter(writer)
 		}
 
 		if len(conf.FW.WfLogPath) > 0 {
@@ -52,28 +41,22 @@ func InstanceLogConf(conf LogConfig, logger *Logger) error {
 			wfw.SetPathPattern(conf.FW.RotateWfLogPath)
 			wfw.SetLogLevelFloor(WARNING)
 			wfw.SetLogLevelCeil(ERROR)
-			logger.registerLogWriter(wfw)
+			defaultLogger.registerLogWriter(wfw)
 		}
 	}
 	switch conf.Level {
 	case "trace":
-		logger.SetLevel(TRACE)
-
+		defaultLogger.SetLevel(TRACE)
 	case "debug":
-		logger.SetLevel(DEBUG)
-
+		defaultLogger.SetLevel(DEBUG)
 	case "info":
-		logger.SetLevel(INFO)
-
-	case "warn":
-		logger.SetLevel(WARNING)
-
+		defaultLogger.SetLevel(INFO)
+	case "warning":
+		defaultLogger.SetLevel(WARNING)
 	case "error":
-		logger.SetLevel(ERROR)
-
+		defaultLogger.SetLevel(ERROR)
 	case "fatal":
-		logger.SetLevel(FATAL)
-
+		defaultLogger.SetLevel(FATAL)
 	default:
 		return errors.New("invalid log_conf level")
 	}

@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
-	base "iot_go/base/conf"
+	"fmt"
+	conf "iot_go/base/conf"
+	boot "iot_go/base/init"
 	logger "iot_go/base/log"
 	"time"
 )
@@ -13,11 +15,12 @@ var (
 
 func main() {
 	flag.Parse()
-	err := base.InitModule(*config)
+	err := boot.Module(*config)
 	if err != nil {
 		return
 	}
 	logger.Warning("test message")
 	logger.Close()
 	time.Sleep(time.Second)
+	fmt.Printf("  sssss%v\n", conf.Conf)
 }

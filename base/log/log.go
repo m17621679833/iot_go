@@ -254,12 +254,3 @@ func Error(format string, args ...interface{}) {
 func Fatal(format string, args ...interface{}) {
 	defaultLogger.Fatal(format, args...)
 }
-
-func InitLogConf(conf LogConfig) error {
-	defaultLoggerInit()
-	err := InstanceLogConf(conf, defaultLogger)
-	if err != nil {
-		return err
-	}
-	return nil
-}

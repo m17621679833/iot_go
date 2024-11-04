@@ -5,43 +5,27 @@ import (
 	"fmt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	fileParser "iot_go/base/conf"
-	"time"
+	config "iot_go/base/conf"
 )
 
-var GORMMapPool map[string]*gorm.DB
-var GORMDefaultPool *gorm.DB
-
-type Sqlite3MapConf struct {
-	List map[string]*Sqlite3Conf `mapstructure:"list"`
-}
-
-type Sqlite3Conf struct {
-	DriverName      string `mapstructure:"driver_name"`
-	DataSourceName  string `mapstructure:"db_name"`
-	MaxOpenConn     int    `mapstructure:"max_open_conn"`
-	MaxIdleConn     int    `mapstructure:"max_idle_conn"`
-	MaxConnLifeTime int    `mapstructure:"max_conn_life_time"`
-}
-
 func GetGormPool(name string) (*gorm.DB, error) {
-	if dbPool, ok := GORMMapPool[name]; ok {
+	if dbPool, ok := config.GORMMapPool[name]; ok {
 		return dbPool, nil
 	}
 	return nil, errors.New("get pool error")
 }
 
 func InitSqlite3DB(path string) error {
-	DbConfMap := &Sqlite3MapConf{}
-	err := fileParser.ParseConfig(path, DbConfMap)
+	DbConfMap := &config.Sqlite3MapConf{}
+	err := config.ParseConfig(path, DbConfMap)
 	if err != nil {
 		return err
 	}
 	if len(DbConfMap.List) == 0 {
-		fmt.Printf("[INFO] %s%s\n", time.Now().Format(fileParser.TimeFormat), " empty sqlite3 conf.")
+		fmt.Printf("[INFO] empty db conf.")
 	}
-	GORMMapPool = map[string]*gorm.DB{}
-	for confName, conf := range DbConfMap.List {
+	config.GORMMapPool = map[string]*gorm.DB{}
+	for confName, conf := range config.Sl3Conf.List {
 		gormConn, err := gorm.Open(sqlite.Open(conf.DataSourceName), &gorm.Config{})
 		if err != nil {
 			return err
@@ -61,16 +45,16 @@ func InitSqlite3DB(path string) error {
 		if err != nil {
 			return err
 		}
-		GORMMapPool[confName] = gormConn
+		config.GORMMapPool[confName] = gormConn
 	}
 	if pool, err := GetSqlite3GormPool("default"); err == nil {
-		GORMDefaultPool = pool
+		config.GORMDefaultPool = pool
 	}
 	return nil
 }
 
 func GetSqlite3GormPool(name string) (*gorm.DB, error) {
-	if pool, ok := GORMMapPool[name]; ok {
+	if pool, ok := config.GORMMapPool[name]; ok {
 		return pool, nil
 	}
 	return nil, errors.New("get pool error")
