@@ -18,7 +18,6 @@ var Env string
 var ConfPath string
 var LocalIP = net.ParseIP("127.0.0.1")
 var Conf *Base
-var Sl3Conf *Sqlite3MapConf
 var GORMMapPool map[string]*gorm.DB
 var GORMDefaultPool *gorm.DB
 
@@ -84,10 +83,6 @@ type SwaggerConfig struct {
 
 func SetBaseConf(conf *Base) {
 	Conf = conf
-}
-
-func SetSqlite3Conf(conf *Sqlite3MapConf) {
-	Sl3Conf = conf
 }
 
 func SetConfEnvPath(confPath string) error {

@@ -25,7 +25,7 @@ func InitSqlite3DB(path string) error {
 		fmt.Printf("[INFO] empty db conf.")
 	}
 	config.GORMMapPool = map[string]*gorm.DB{}
-	for confName, conf := range config.Sl3Conf.List {
+	for confName, conf := range DbConfMap.List {
 		gormConn, err := gorm.Open(sqlite.Open(conf.DataSourceName), &gorm.Config{})
 		if err != nil {
 			return err

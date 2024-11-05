@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	config "iot_go/base/conf"
 	logFacede "iot_go/base/log"
 	"math/rand"
 	"net"
@@ -12,8 +13,6 @@ import (
 	"strings"
 	"time"
 )
-
-var LocalIP = net.ParseIP("127.0.0.1")
 
 const (
 	Undefined    = "_undef"
@@ -38,6 +37,8 @@ const (
 	_tagBizUndef  = "_com_undef"
 )
 
+var NiceLogger *Logger
+
 type Logger struct {
 }
 
@@ -48,6 +49,13 @@ type Trace struct {
 	SrcMethod   string
 	HintCode    int64
 	HintContent string
+}
+
+func NewTrace() *TraceContext {
+	trace := &TraceContext{}
+	trace.TraceId = calcTraceId(config.LocalIP.String())
+	trace.SpanId = NewSpanId()
+	return trace
 }
 
 type TraceContext struct {
@@ -125,12 +133,13 @@ func parseParams(m map[string]interface{}) string {
 
 func NewSpanId() string {
 	timestamp := uint32(time.Now().Unix())
-	ipToLong := binary.BigEndian.Uint32(LocalIP.To4())
+	ipToLong := binary.BigEndian.Uint32(config.LocalIP.To4())
 	b := bytes.Buffer{}
 	b.WriteString(fmt.Sprintf("%08x", ipToLong^timestamp))
 	b.WriteString(fmt.Sprintf("%08x", rand.Int31()))
 	return b.String()
 }
+
 func calcTraceId(ip string) (traceId string) {
 	now := time.Now()
 	timestamp := uint32(now.Unix())
@@ -148,7 +157,7 @@ func calcTraceId(ip string) (traceId string) {
 	b.WriteString(fmt.Sprintf("%04x", timeNano&0xffff))
 	b.WriteString(fmt.Sprintf("%04x", pid&0xffff))
 	b.WriteString(fmt.Sprintf("%06x", rand.Int31n(1<<24)))
-	b.WriteString("b0") // 末两位标记来源,b0为go
+	b.WriteString("b0")
 
 	return b.String()
 }

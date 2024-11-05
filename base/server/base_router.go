@@ -5,7 +5,8 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	config "iot_go/base/conf"
-	"iot_go/docs"
+	"iot_go/base/docs"
+	"iot_go/middleware"
 )
 
 func InitRoute() *gin.Engine {
@@ -15,10 +16,8 @@ func InitRoute() *gin.Engine {
 	docs.SwaggerInfo.Host = config.Conf.SwaggerConfig.Host
 	docs.SwaggerInfo.BasePath = config.Conf.SwaggerConfig.BasePath
 	docs.SwaggerInfo.Schemes = config.Conf.SwaggerConfig.Schemes
-
 	router := gin.Default()
-	//router.Use(middleware.Cors())
-
+	router.Use(middleware.Cors())
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",

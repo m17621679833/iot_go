@@ -24,3 +24,6 @@ go.work.sum
 # env file
 .env
 /logs/
+/iot.db
+/iot.db-shm
+/iot.db-wal

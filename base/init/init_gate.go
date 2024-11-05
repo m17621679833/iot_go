@@ -5,14 +5,14 @@ import (
 	config "iot_go/base/conf"
 	sqlite "iot_go/base/db"
 	logbase "iot_go/base/log"
-	util "iot_go/base/util"
-	"iot_go/server"
+	"iot_go/base/server"
+	"iot_go/base/util"
 	"log"
 	"os"
 )
 
-func Module(configPath string) error {
-	return initConfig(configPath, []string{"base"})
+func Goo(configPath string) error {
+	return initConfig(configPath, []string{"base", "sqlite3"})
 }
 
 func initConfig(configPath string, modules []string) error {

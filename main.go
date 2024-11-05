@@ -14,10 +14,11 @@ var (
 
 func main() {
 	flag.Parse()
-	err := boot.Module(*config)
+	err := boot.Goo(*config)
 	if err != nil {
 		return
 	}
+	defer boot.Destroy()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit

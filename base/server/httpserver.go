@@ -14,7 +14,7 @@ var (
 )
 
 func HttpServerRun() {
-	gin.SetMode(config.GetStringConf("env.base.debug_mode"))
+	gin.SetMode(config.Conf.BaseInfo.DebugMode)
 	r := InitRoute()
 	HttpSrvHandler := &http.Server{
 		Addr:           config.Conf.HttpConfig.Addr,
