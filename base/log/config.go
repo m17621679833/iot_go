@@ -6,7 +6,6 @@ import (
 )
 
 func BootstrapConf(fileName string) {
-
 	/*初始化logger base*/
 	defaultLoggerInit()
 	log := &conf.Base{}

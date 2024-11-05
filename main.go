@@ -2,11 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	conf "iot_go/base/conf"
 	boot "iot_go/base/init"
-	logger "iot_go/base/log"
-	"time"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var (
@@ -19,8 +18,7 @@ func main() {
 	if err != nil {
 		return
 	}
-	logger.Warning("test message")
-	logger.Close()
-	time.Sleep(time.Second)
-	fmt.Printf("  sssss%v\n", conf.Conf)
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
 }
