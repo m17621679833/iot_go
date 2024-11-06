@@ -21,10 +21,10 @@
     log_level = "trace"         #日志打印最低级别
     [log.file_writer]           #文件写入配置
         on = true
-        log_path = "./logs/go_gateway.inf.log"
-        rotate_log_path = "./logs/go_gateway.inf.log.%Y%M%D%H"
-        wf_log_path = "./logs/go_gateway.wf.log"
-        rotate_wf_log_path = "./logs/go_gateway.wf.log.%Y%M%D%H"
+        log_path = "./logs/iot.inf.log"
+        rotate_log_path = "./logs/iot.inf.log.%Y%M%D%H"
+        wf_log_path = "./logs/iot.wf.log"
+        rotate_wf_log_path = "./logs/iot.wf.log.%Y%M%D%H"
     [log.console_writer]        #工作台输出
         on = true
         color = true
