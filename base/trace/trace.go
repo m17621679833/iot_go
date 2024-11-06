@@ -116,8 +116,9 @@ func (l *Logger) Close() {
 
 func parseParams(m map[string]interface{}) string {
 	var bizTag = Undefined
-	if bizTag, have := m[_bizTag]; have {
-		if val, ok := bizTag.(string); ok {
+	v, have := m[_bizTag]
+	if have {
+		if val, ok := v.(string); ok {
 			bizTag = val
 		}
 	}

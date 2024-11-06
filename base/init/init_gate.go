@@ -31,7 +31,10 @@ func initConfig(configPath string, modules []string) error {
 		return err
 	}
 	if in := util.StrInArray("base", modules); in {
-		logbase.BootstrapConf("base")
+		err := logbase.BootstrapConf("base")
+		if err != nil {
+			fmt.Printf("[ERROR] InitBase:" + err.Error())
+		}
 	}
 	if util.StrInArray("sqlite3", modules) {
 		if err := sqlite.InitSqlite3DB(config.GetConfigFilePath("sqlite3_map")); err != nil {

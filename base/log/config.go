@@ -5,13 +5,20 @@ import (
 	conf "iot_go/base/conf"
 )
 
-func BootstrapConf(fileName string) {
+func BootstrapConf(fileName string) error {
 	/*初始化logger base*/
 	defaultLoggerInit()
 	log := &conf.Base{}
-	conf.ParseConfigByFileName(fileName, log)
+	err := conf.ParseConfigByFileName(fileName, log)
+	if err != nil {
+		return err
+	}
 	conf.SetBaseConf(log)
-	SetLogConf(log.LogConfig)
+	err = SetLogConf(log.LogConfig)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func SetLogConf(conf conf.LogConfig) error {

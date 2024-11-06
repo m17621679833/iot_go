@@ -7,6 +7,7 @@ import (
 	config "iot_go/base/conf"
 	"iot_go/base/docs"
 	"iot_go/middleware"
+	appRouter "iot_go/router"
 )
 
 func InitRoute() *gin.Engine {
@@ -24,5 +25,6 @@ func InitRoute() *gin.Engine {
 		})
 	})
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	appRouter.RegisterRouter(router)
 	return router
 }

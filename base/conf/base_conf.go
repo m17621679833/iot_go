@@ -69,7 +69,7 @@ type HttpConfig struct {
 	ReadTimeout    time.Duration `mapstructure:"read_timeout"`
 	WriteTimeout   time.Duration `mapstructure:"write_timeout"`
 	MaxHeaderBytes int           `mapstructure:"max_header_bytes"`
-	AllowIP        []net.IP      `mapstructure:"allow_ip"`
+	AllowIP        []string      `mapstructure:"allow_ip"`
 }
 
 type SwaggerConfig struct {
