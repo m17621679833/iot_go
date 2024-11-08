@@ -62,6 +62,7 @@ type Sqlite3Conf struct {
 	MaxOpenConn     int    `mapstructure:"max_open_conn"`
 	MaxIdleConn     int    `mapstructure:"max_idle_conn"`
 	MaxConnLifeTime int    `mapstructure:"max_conn_life_time"`
+	LogLevel        string `mapstructure:"log_level"`
 }
 
 type HttpConfig struct {

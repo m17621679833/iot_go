@@ -1,6 +1,8 @@
 package util
 
 import (
+	"github.com/gin-gonic/gin"
+	trace "iot_go/base/trace"
 	"net"
 )
 
@@ -27,4 +29,19 @@ func StrInArray(s string, arr []string) bool {
 		}
 	}
 	return false
+}
+
+// GetGinTraceContext 从gin的Context中获取数据
+func GetGinTraceContext(c *gin.Context) *trace.TraceContext {
+	// 防御
+	if c == nil {
+		return trace.NewTrace()
+	}
+	traceContext, exists := c.Get("trace")
+	if exists {
+		if tc, ok := traceContext.(*trace.TraceContext); ok {
+			return tc
+		}
+	}
+	return trace.NewTrace()
 }

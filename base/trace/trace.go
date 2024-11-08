@@ -42,6 +42,13 @@ var NiceLogger *Logger
 type Logger struct {
 }
 
+func NewTrace() *TraceContext {
+	trace := &TraceContext{}
+	trace.TraceId = calcTraceId(config.LocalIP.String())
+	trace.SpanId = NewSpanId()
+	return trace
+}
+
 type Trace struct {
 	TraceId     string
 	SpanId      string
@@ -49,13 +56,6 @@ type Trace struct {
 	SrcMethod   string
 	HintCode    int64
 	HintContent string
-}
-
-func NewTrace() *TraceContext {
-	trace := &TraceContext{}
-	trace.TraceId = calcTraceId(config.LocalIP.String())
-	trace.SpanId = NewSpanId()
-	return trace
 }
 
 type TraceContext struct {

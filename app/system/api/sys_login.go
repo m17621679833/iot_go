@@ -1,6 +1,10 @@
 package system
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	base "iot_go/base/db"
+	"iot_go/middleware"
+)
 
 type SysLoginApi struct {
 }
@@ -21,5 +25,6 @@ func RegisterSysLoginApi(systemGroup *gin.RouterGroup) {
 // @Success 200 {object} middleware.Response{data=dto.UserTokenOutput} "success"
 // @Router /system/auth/login [post]
 func (login *SysLoginApi) UserLogin(c *gin.Context) {
-	return
+	base.GetDefaultDB(c)
+	middleware.ResponseSuccess(c, true)
 }
